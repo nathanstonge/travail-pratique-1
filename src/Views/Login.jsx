@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { HashRouter } from "react-router-dom";
 import CreationCompte from "./CreationCompte";
 
-function Login() {
+function Login(props) {
+  const listUsers = props.listUsers;
+  console.log(listUsers);
+
+  const [accountCreation, setAccountCreation] = useState(false);
   const [connexionInfos, setInfos] = useState({
     userName: "",
     password: "",
   });
 
   function handleChange(event) {
+   
     const { value, name } = event.target;
     setInfos((prevValue) => {
       return {
@@ -21,16 +26,18 @@ function Login() {
   function handleConnexion() {}
 
   function createNewAccount() {
-    return <CreationCompte />;
+    setAccountCreation(true);
   }
 
   return (
-    <div className="container-fluid" style={{ marginTop: "8%" }}>
+    <div>
+    {!accountCreation ?
+      (<div className="container" style={{ marginTop: "8%" }}>
       <div className="row justify-content-center">
         <div className="col-4">
           <div className="card p-5">
             <div className="card-body">
-              <div className="row align-items-center mb-4">
+              <div className="row mb-4">
                 <img
                   src="https://hbr.org/resources/images/article_assets/2019/08/Aug19_25_518358614.jpg"
                   className="rounded-circle"
@@ -43,16 +50,16 @@ function Login() {
                   onChange={handleChange}
                   value={connexionInfos.userName}
                   type="text"
-                  placeholder="Enter your username"
+                  placeholder="Nom d'utilisateur"
                 />
               </div>
               <div className="row mb-4">
                 <input
                   name="password"
-                  onChange={createNewAccount}
+                  onChange={handleChange}
                   value={connexionInfos.password}
-                  type="text"
-                  placeholder="Enter your password"
+                  type="password"
+                  placeholder="Mot de passe"
                 />
               </div>
               <div className="row mb-2">
@@ -61,12 +68,9 @@ function Login() {
                 </button>
               </div>
               <div className="row text-center">
-                {/* <a href="#" onClick={() => createNewAccount}>Créer un nouveau compte</a> */}
-                {/* <link to="/createAccount"> */}
-                <button className="btn btn-link" to="/createAccount">
+                <button className="btn btn-link" onClick={createNewAccount}>
                   Créer un nouveau compte
                 </button>
-                {/* </link> */}
               </div>
             </div>
           </div>
@@ -78,7 +82,10 @@ function Login() {
       >
         Connexion administrateur
       </button>
+    </div>) : <CreationCompte/>}
     </div>
+    
+    
   );
 }
 

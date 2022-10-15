@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
+import InputCreateAccount from "../Components/InputCreateAccount";
 import Login from "./Login";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function CreationCompte() {
+function CreationCompte(props) {
   const accessCodeV = "2525";
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
@@ -30,8 +33,9 @@ function CreationCompte() {
     setUsers((prevValue) => {
       return [...prevValue, userInfo];
     });
-
-    setLoginPage(true);
+    navigate("/", {state: userInfo})
+    // props.onNewAccountCreated(userInfo);
+    // setLoginPage(true);
   }
   function checkUser(event) {
     event.preventDefault();
@@ -56,66 +60,62 @@ function CreationCompte() {
             <div className="col-6">
               <div className="card">
                 <div className="card-header text-end">
-                  <i className="fa-solid fa-xmark fa-xl"></i>
+                  <Link to="/">
+                  <i
+                    // onClick={updateUsers}
+                    className="fa-solid fa-xmark fa-xl"
+                  ></i>
+                  </Link>
                 </div>
                 <div className="card-body p-5 ">
                   <form onSubmit={checkUser}>
-                    <div className="row mb-4">
-                      <span>
-                        <label>Nom: </label>
-                        <input
-                          onChange={updateInfo}
-                          value={userInfo.lastName}
-                          type="text"
-                          name="lastName"
-                          placeholder="Nom"
-                          required
-                        />
-                      </span>
-                    </div>
-                    <div className="row mb-4">
-                      <label>Prénom: </label>
-                      <input
-                        onChange={updateInfo}
-                        value={userInfo.firstName}
-                        type="text"
-                        name="firstName"
-                        placeholder="Prénom"
-                        required
-                      />
-                    </div>
-                    <div className="row mb-4">
-                      <label>Date de naissance: </label>
-                      <input
-                        name="birthday"
-                        type="date"
-                        value={userInfo.birthday}
-                        onChange={updateInfo}
-                        required
-                      />
-                    </div>
-                    <div className="row mb-4">
-                      <label>Nom utilisateur: </label>
-                      <input
-                        onChange={updateInfo}
-                        value={userInfo.username}
-                        type="text"
-                        name="username"
-                        placeholder="Nom d'utilisateur"
-                        required
-                      />
-                    </div>
-                    <div className="row mb-4">
-                      <label>Mot de passe: </label>
-                      <input
-                        onChange={updateInfo}
-                        value={userInfo.password}
-                        type="text"
-                        name="password"
-                        placeholder="Mot de passe"
-                        required
-                      />
-                    </div>
+                    <InputCreateAccount
+                      title="Nom"
+                      method={updateInfo}
+                      value={userInfo.lastName}
+                      type="text"
+                      name="lastName"
+                      placeholder="Nom"
+                      required
+                    />
+
+                    <InputCreateAccount
+                      title="Prénom"
+                      method={updateInfo}
+                      value={userInfo.firstName}
+                      type="text"
+                      name="firstName"
+                      placeholder="Prénom"
+                      required
+                    />
+
+                    <InputCreateAccount
+                      title="Date de naissance"
+                      method={updateInfo}
+                      value={userInfo.birthday}
+                      type="date"
+                      name="birthday"
+                    />
+
+                    <InputCreateAccount
+                      title="Nom utilisateur"
+                      method={updateInfo}
+                      value={userInfo.username}
+                      type="text"
+                      name="username"
+                      placeholder="Nom d'utilisateur"
+                      required
+                    />
+
+                    <InputCreateAccount
+                      title="Mot de passe"
+                      method={updateInfo}
+                      value={userInfo.password}
+                      type="password"
+                      name="password"
+                      placeholder="Mot de passe"
+                      required
+                    />
                     <div className="row mb-4">
                       <label className="mb-2">Type de compte:</label>
                       <div className="col">
@@ -123,7 +123,7 @@ function CreationCompte() {
                           onChange={updateInfo}
                           type="radio"
                           name="accountType"
-                          id=""
+                          id="client"
                           value="client"
                           required
                         />
@@ -134,7 +134,7 @@ function CreationCompte() {
                           onChange={updateInfo}
                           type="radio"
                           name="accountType"
-                          id=""
+                          id="admin"
                           value="admin"
                           required
                         />
@@ -147,14 +147,13 @@ function CreationCompte() {
                               : { display: "none" }
                           }
                         >
-                          (<label>Code d'accès: </label>
+                          <label>Code d'accès: </label>
                           <input
                             name="adminCode"
                             onChange={updateInfo}
                             value={userInfo.adminCode}
                             type="text"
                           />
-                          )
                         </div>
                       </div>
                     </div>
@@ -170,7 +169,7 @@ function CreationCompte() {
           </div>
         </div>
       ) : (
-        <Login listUsers={users} />
+        <Login />
       )}
     </div>
   );
